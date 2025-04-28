@@ -7,7 +7,9 @@ Ball.size = 20
 Ball.x = 0
 Ball.y = 0
 Ball.velocityX = 0
+Ball.timerVX = love.timer.getTime()
 Ball.velocityY = 0
+Ball.timerVY = love.timer.getTime()
 Ball.isMooving = false
 
 Ball.__index = Ball
@@ -30,10 +32,19 @@ function Ball:moove(deltaTime)
 end
 
 function Ball:reverseVelocity(vars)
-	if (vars == 'x') then
+	local now = love.timer.getTime()
+	if (vars == 'x' and now - self.timerVX >= .0001) then
+		-- Renforce l'effet de rebond lors de la collision horizontal pour éviter que la balle enchaine plusieurs briques sur l'axe y sans modifier suffisement sa trajectoire lorsqu'elle a une velocité sur x trop faible
+		if (self.velocityX >= 0) then
+			self.velocityX = self.velocityX + 10
+		else
+			self.velocityX = self.velocityX - 10
+		end
 		self.velocityX = -self.velocityX
-	elseif (vars == 'y') then
+		self.timerVX = now
+	elseif (vars == 'y' and now - self.timerVY >= .0001) then
 		self.velocityY = -self.velocityY
+		self.timerVY = now
 	end
 end
 

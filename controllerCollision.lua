@@ -15,23 +15,17 @@ end
 function ControllerCollision:ballCollision()
 	if (self.property.ball.y <= 0 + self.property.ball.size/2) then
 		self.property.ball.y = 0 + self.property.ball.size/2
-		self.property.ball.velocityY = -self.property.ball.velocityY
+		self.property.ball:reverseVelocity('y')
 	end
 	if (self.property.ball.x <= 0 + self.property.ball.size/2) then
 		self.property.ball.x = 0 + self.property.ball.size/2
-		self.property.ball.velocityX = -self.property.ball.velocityX
+		self.property.ball:reverseVelocity('x')
 	elseif (self.property.ball.x >= SCREEN_WIDTH - self.property.ball.size/2) then
 		self.property.ball.x = SCREEN_WIDTH - self.property.ball.size/2
-		self.property.ball.velocityX = -self.property.ball.velocityX
+		self.property.ball:reverseVelocity('x')
 	end
 	if (self.property.ball.y + self.property.ball.size/2 >= self.property.racket.y - self.property.racket.height/2 and self.property.ball.y + self.property.ball.size/2 <= self.property.racket.y and self.property.ball.x + self.property.ball.size/3 >= self.property.racket.x - self.property.racket.width/2 and self.property.ball.x - self.property.ball.size/3 <= self.property.racket.x + self.property.racket.width/2) then
-		self.property.ball.y = self.property.racket.y - self.property.racket.height/2 - self.property.ball.size/2
-		self.property.ball.velocityY = -self.property.ball.velocityY
-		if (self.property.racket.goingRight == true) then
-			self.property.ball.velocityX = self.property.ball.velocityX + self.property.racket.speed
-		elseif (self.property.racket.goingLeft == true) then
-			self.property.ball.velocityX = self.property.ball.velocityX - self.property.racket.speed
-		end
+		self:racketRebound()
 	end
 	
 	for i = 1, 20 do
@@ -54,6 +48,16 @@ function ControllerCollision:ballCollision()
 				end
 			end
 		end
+	end
+end
+
+function ControllerCollision:racketRebound()
+	self.property.ball.y = self.property.racket.y - self.property.racket.height/2 - self.property.ball.size/2
+	self.property.ball.velocityY = -self.property.ball.velocityY
+	if (self.property.racket.goingRight == true and self.property.ball.velocityX < 350) then
+		self.property.ball.velocityX = self.property.ball.velocityX + self.property.racket.speed/3 - love.math.random() * 20
+	elseif (self.property.racket.goingLeft == true and self.property.ball.velocityX > -350) then
+		self.property.ball.velocityX = self.property.ball.velocityX - self.property.racket.speed/3 + love.math.random() * 20
 	end
 end
 

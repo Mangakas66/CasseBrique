@@ -20,7 +20,7 @@ function resetGame()
 	resetRacket()
 	resetBall()
 	actualGrid:reset()
-	actualGrid:setLvlTest()
+	actualGrid:setLvl1()
 end
 
 function resetRacket()
@@ -74,10 +74,6 @@ function game.update(deltaTime)
 			cc:ballCollision()
 			GameValues.score = actualGrid.initialNumberBrick - actualGrid.actualNumberBrick
 			if (GameValues.score == actualGrid.initialNumberBrick) then
-				print("in")
-				print(GameValues.score)
-				print(actualGrid.initialNumberBrick)
-				print(actualGrid.actualNumberBrick)
 				resetGame()
 			end
 		end
