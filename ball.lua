@@ -1,30 +1,47 @@
 -- Fichier représantant une balle
 -- Bien que pour l'instant il n'y en ai qu'une, il y aura définitivement plusieurs balle dans le futur
 
-local ball = {}
+local Ball = {}
 
-ball.size = 20
-ball.x = 0
-ball.y = 0
-ball.velocityX = 0
-ball.velocityY = 0
-ball.isMooving = false
+Ball.size = 20
+Ball.x = 0
+Ball.y = 0
+Ball.velocityX = 0
+Ball.velocityY = 0
+Ball.isMooving = false
 
-function ball.start()
-	ball.velocityX = 500
-	ball.velocityY = -300
-	ball.isMooving = true
+Ball.__index = Ball
+
+function Ball:new(vars)
+	local instance = setmetatable({}, Ball)
+	instance.property = vars
+    return instance
 end
 
-function ball.moove(deltaTime)
-	ball.x = ball.x + ball.velocityX*deltaTime
-	ball.y = ball.y + ball.velocityY*deltaTime
+function Ball:start()
+	self.velocityX = 0
+	self.velocityY = -300
+	self.isMooving = true
 end
 
-function ball.destroy()
-	if (ball.y > SCREEN_HEIGHT) then
+function Ball:moove(deltaTime)
+	self.x = self.x + self.velocityX*deltaTime
+	self.y = self.y + self.velocityY*deltaTime
+end
+
+function Ball:reverseVelocity(vars)
+	if (vars == 'x') then
+		self.velocityX = -self.velocityX
+	elseif (vars == 'y') then
+		self.velocityY = -self.velocityY
+	end
+end
+
+-- Pour quand il y aura plusieurs balles
+function Ball:destroy()
+	if (self.y > SCREEN_HEIGHT) then
 		-- TODO DESTROY BALL
 	end
 end
 
-return ball
+return Ball
